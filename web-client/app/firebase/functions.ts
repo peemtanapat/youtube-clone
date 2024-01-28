@@ -12,7 +12,7 @@ export async function uploadVideo(file: File) {
   const uploadUrlResponse: any = await generateUploadUrlFunction({
     fileExtension,
   });
-  console.log('%c⧭', 'color: #ff6a00', { uploadUrlResponse });
+  // console.log({ uploadUrlResponse });
 
   // Upload file via Signed URL
   const uploadResult = await fetch(uploadUrlResponse?.data?.url, {
@@ -23,7 +23,7 @@ export async function uploadVideo(file: File) {
     },
   });
 
-  console.log('%c⧭', 'color: #ffa640', { uploadResult });
+  // console.log({ uploadResult });
   return uploadResult;
 }
 
@@ -38,8 +38,6 @@ export interface Video {
 
 export async function getAllVideosFirestore() {
   const response = await getVideosFunction();
-  console.log('%c⧭', 'color: #f200e2', {
-    getAllVideosFirestoreZ: response.data,
-  });
+
   return response.data as Video[];
 }

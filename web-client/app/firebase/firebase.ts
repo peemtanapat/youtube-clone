@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -7,8 +6,7 @@ import {
   onAuthStateChanged,
   User,
 } from 'firebase/auth';
-import { getFunctions, httpsCallable } from 'firebase/functions';
-import { uploadVideo } from './functions';
+import { getFunctions } from 'firebase/functions';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,12 +27,8 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
+// for firebase-functions
 export const firebaseFunctions = getFunctions(app, MY_REGION);
-// const generateUploadUrlFunction = httpsCallable(
-//   firebaseFunctions,
-//   'generateUploadUrl'
-// );
-// export const getVideosFunction = httpsCallable(firebaseFunctions, 'getVideos');
 
 export function signInWithGoogle() {
   return signInWithPopup(auth, new GoogleAuthProvider());

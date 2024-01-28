@@ -12,7 +12,6 @@ import Upload from './upload';
 export default function Navbar() {
   // Init user state
   const [user, setUser] = useState<User | null>(null);
-  console.log('%c⧭', 'color: #0088cc', { user });
 
   useEffect(() => {
     const unSubscribe = onAuthStateChangedHelper((user) => {

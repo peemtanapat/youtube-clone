@@ -25,11 +25,11 @@ const PORT = process.env.PORT || 3001;
 app.post('/process-video', async (req, res) => {
   const inputFilePath = req.body.inputFilePath;
   const fileName = path.basename(inputFilePath);
-  console.log('%c⧭', 'color: #733d00', { fileName });
+  console.log({ fileName });
   const outputFilePath = req.body.outputFilePath;
   const videoId = inputFilePath.split('.')[0];
 
-  console.log('%c⧭', 'color: #00b300', {
+  console.log({
     inputFilePath,
     fileName,
     outputFilePath,
@@ -42,7 +42,7 @@ app.post('/process-video', async (req, res) => {
 
   try {
     const isNewVideo = await isVideoNew(videoId);
-    console.log('%c⧭', 'color: #1d5673', { isNewVideo });
+    console.log({ isNewVideo });
     if (!isNewVideo) {
       res
         .status(400)

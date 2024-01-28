@@ -68,7 +68,7 @@ export async function uploadVideoToBucket(
   fileName: string,
   makeFilePublic = false
 ) {
-  console.log('%c⧭', 'color: #00a3cc', { bucketName, localFilePath, fileName });
+  console.log({ uploadVideoToBucket: { bucketName, localFilePath, fileName } });
   const bucket = storage.bucket(bucketName);
 
   const destBucketPath = `${fileName}`;
