@@ -1,0 +1,11 @@
+### homepage
+GET http://localhost:3000
+
+### convert video to 360p
+POST http://localhost:3000/process-video
+Content-Type: application/json
+
+{
+  "inputFilePath": "/Users/peemtanapat/code/learn/youtube-clone/video-processing-service/videos/warmup_krupam.mp4",
+  "outputFilePath": "/Users/peemtanapat/code/learn/youtube-clone/video-processing-service/outputs/warmup_krupam.mp4"
+}
