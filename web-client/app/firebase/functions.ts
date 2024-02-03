@@ -12,7 +12,6 @@ export async function uploadVideo(file: File) {
   const uploadUrlResponse: any = await generateUploadUrlFunction({
     fileExtension,
   });
-  // console.log({ uploadUrlResponse });
 
   // Upload file via Signed URL
   const uploadResult = await fetch(uploadUrlResponse?.data?.url, {
@@ -23,7 +22,6 @@ export async function uploadVideo(file: File) {
     },
   });
 
-  // console.log({ uploadResult });
   return uploadResult;
 }
 

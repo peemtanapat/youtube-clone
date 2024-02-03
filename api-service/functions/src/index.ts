@@ -34,8 +34,6 @@ export const createUser = myFunctions.auth
     firestore.collection('users').doc(userId).set(userInfo);
 
     logger.info(`User Created: ${JSON.stringify(userInfo)}`);
-
-    return;
   });
 
 export const generateUploadUrl = onCall(
@@ -78,8 +76,3 @@ export const getVideos = onCall(
     return snapshot.docs.map((doc) => doc.data());
   }
 );
-
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info('Hello logs!', { structuredData: true });
-//   response.send('Hello from Firebase!');
-// });

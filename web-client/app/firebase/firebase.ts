@@ -7,16 +7,12 @@ import {
   User,
 } from 'firebase/auth';
 import { getFunctions } from 'firebase/functions';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+// Please change to your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyDJA_j0k_8ZuKtqIjo7RJ7lr9zzQr6h9PY',
   authDomain: 'peemtanapat--clone.firebaseapp.com',
   projectId: 'peemtanapat-youtube-clone',
-  //   storageBucket: 'peemtanapat-youtube-clone.appspot.com',
-  //   messagingSenderId: '1070041746619',
   appId: '1:1070041746619:web:84f51ba710689f63446d9e',
 };
 

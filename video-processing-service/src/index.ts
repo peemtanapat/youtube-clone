@@ -23,20 +23,47 @@ app.use(express.json());
 const PORT = process.env.PORT || 3001;
 
 app.post('/process-video', async (req, res) => {
-  const inputFilePath = req.body.inputFilePath;
-  const fileName = path.basename(inputFilePath);
-  console.log({ fileName });
-  const outputFilePath = req.body.outputFilePath;
-  const videoId = inputFilePath.split('.')[0];
+  let inputFileName: string;
 
   console.log({
-    inputFilePath,
-    fileName,
-    outputFilePath,
+    'process-video': {
+      inputFileName: req.body.inputFileName,
+      message: req.body.message?.data,
+      messageId: req.body.message?.messageId,
+      publishTime: req.body.message?.publishTime,
+    },
+  });
+
+  if (req.body.inputFileName) {
+    inputFileName = req.body.inputFileName;
+  } else {
+    try {
+      const message = Buffer.from(req.body.message.data, 'base64').toString(
+        'utf8'
+      );
+      const data = JSON.parse(message);
+
+      if (!data.name) {
+        throw new Error('Invalid message payload received.');
+      }
+
+      inputFileName = data.name;
+    } catch (error) {
+      console.error(error);
+      return res.status(400).send('Bad Request: missing filename.');
+    }
+  }
+
+  const outputFileName = `processed-${inputFileName}`;
+  const videoId = inputFileName.split('.')[0];
+
+  console.log({
+    inputFileName,
+    outputFileName,
     videoId,
   });
 
-  if (!inputFilePath || !outputFilePath) {
+  if (!inputFileName || !outputFileName) {
     res.status(400).send('Bad Request: Missing file path.');
   }
 
@@ -56,32 +83,31 @@ app.post('/process-video', async (req, res) => {
       });
     }
 
-    await downloadRawVideo(fileName);
+    // Download uploaded raw video
+    await downloadRawVideo(inputFileName);
 
     // Convert raw video to be 360p
-    await convertVideo(inputFilePath, outputFilePath);
+    await convertVideo(inputFileName, outputFileName);
 
     // upload converted video to Cloud Storage
-    const processedFileName = path.basename(outputFilePath);
-    await uploadProcessedVideoToBucket(processedFileName);
+    await uploadProcessedVideoToBucket(outputFileName);
 
     await setVideo(videoId, {
       status: 'processed',
-      filename: outputFilePath,
+      filename: outputFileName,
     });
 
     console.log('Video Processing completed');
 
-    res.status(200).send({ processedFileName });
+    res.status(200).send({ processedFileName: outputFileName });
     return;
   } catch (error: any) {
     res.status(500).send('An error occurred: ' + error.message);
-    return;
   } finally {
-    // delete files
+    // delete files;
     await Promise.all([
-      deleteRawVideo(inputFilePath),
-      deleteLocalConvertedVideo(outputFilePath),
+      deleteRawVideo(inputFileName),
+      deleteLocalConvertedVideo(outputFileName),
     ]);
   }
 });
@@ -89,7 +115,6 @@ app.post('/process-video', async (req, res) => {
 app.post('/upload-raw-video', async (req, res) => {
   const inputFilePath = req.body.inputFilePath;
   const fileName = path.basename(inputFilePath);
-  const inputDir = inputFilePath.replace(`/${fileName}`, '');
 
   try {
     const resMessage = await uploadRawVideoToBucket(fileName, inputFilePath);

@@ -2,9 +2,7 @@ import { Storage } from '@google-cloud/storage';
 import fs from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
 import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
-import { authenticateImplicitWithAdc } from './initStorage';
 
-// const storage = authenticateImplicitWithAdc()
 const projectId = 'peemtanapat-youtube-clone';
 const storage = new Storage({
   projectId,
@@ -110,6 +108,7 @@ export async function uploadProcessedVideoToBucket(fileName: string) {
     fileName,
     true
   );
+  console.log('%c⧭', 'color: #007300', { localFilePath, result });
 
   return result;
 }
@@ -123,6 +122,7 @@ export const deleteRawVideo = (fileName: string) => {
 };
 
 export function deleteFile(filePath: string): Promise<void> {
+  console.log({ deleteFile: filePath });
   return new Promise((resolve, reject) => {
     if (fs.existsSync(filePath)) {
       fs.unlink(filePath, (err) => {
@@ -135,7 +135,7 @@ export function deleteFile(filePath: string): Promise<void> {
         }
       });
     } else {
-      console.log('File not exist!');
+      console.log('deleteFile: File not exist!');
       resolve();
     }
   });
